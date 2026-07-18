@@ -1,0 +1,6 @@
+# Python dependencies for the buildable demos (C, D, and Demo A's live poll).
+# The static demos (B, E) need no backend. Install with:
+#   pip install -r requirements.txt
+qrcode[pil]>=7.4
+reportlab>=4.0
+Flask>=3.0

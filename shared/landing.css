@@ -1,0 +1,139 @@
+/* Shared styling for every demo landing / reveal page.
+ * Design goals from the brief: legible from the back row of a 10,000-seat
+ * room, big visual reveals, obviously an awareness demo (never a real login).
+ */
+
+:root {
+  --bg: #0b0f1a;
+  --bg-panel: #131a2b;
+  --ink: #eef2ff;
+  --muted: #9aa7c7;
+  --safe: #22c55e;
+  --danger: #ef4444;
+  --warn: #f59e0b;
+  --accent: #60a5fa;
+  --border: #26304a;
+  --maxw: 900px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5vw 6vw;
+  text-align: center;
+}
+
+.wrap { width: 100%; max-width: var(--maxw); }
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: clamp(0.8rem, 1.6vw, 1.05rem);
+  color: var(--muted);
+  margin: 0 0 0.6em;
+}
+
+h1 {
+  font-size: clamp(2.2rem, 7vw, 5rem);
+  line-height: 1.02;
+  margin: 0 0 0.35em;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.lede {
+  font-size: clamp(1.1rem, 2.8vw, 1.7rem);
+  color: var(--muted);
+  line-height: 1.4;
+  margin: 0 auto 1.4em;
+  max-width: 34ch;
+}
+
+.panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: clamp(1.4rem, 4vw, 2.6rem);
+  margin: 1.2rem auto;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.5em 1.1em;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: clamp(0.95rem, 2vw, 1.25rem);
+  letter-spacing: 0.02em;
+}
+.badge.safe   { background: rgba(34,197,94,0.15);  color: var(--safe);   border: 1px solid rgba(34,197,94,0.4); }
+.badge.danger { background: rgba(239,68,68,0.15);  color: var(--danger); border: 1px solid rgba(239,68,68,0.4); }
+.badge.warn   { background: rgba(245,158,11,0.15); color: var(--warn);   border: 1px solid rgba(245,158,11,0.4); }
+
+.big-domain {
+  font-family: "SF Mono", ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+  font-size: clamp(1.4rem, 5vw, 3.2rem);
+  font-weight: 700;
+  word-break: break-all;
+  margin: 0.5em 0;
+}
+
+.disclaimer {
+  margin-top: 2.2rem;
+  font-size: clamp(0.85rem, 1.8vw, 1.05rem);
+  color: var(--muted);
+  max-width: 46ch;
+  line-height: 1.5;
+}
+.disclaimer strong { color: var(--ink); }
+
+.qr {
+  width: min(60vw, 420px);
+  height: auto;
+  background: #fff;
+  padding: 18px;
+  border-radius: 16px;
+  display: block;
+  margin: 1rem auto;
+}
+
+button, .btn {
+  font: inherit;
+  font-weight: 700;
+  font-size: clamp(1rem, 2.4vw, 1.35rem);
+  color: var(--bg);
+  background: var(--accent);
+  border: none;
+  border-radius: 14px;
+  padding: 0.7em 1.6em;
+  cursor: pointer;
+  transition: transform 0.08s ease, filter 0.15s ease;
+}
+button:hover, .btn:hover { filter: brightness(1.08); }
+button:active, .btn:active { transform: translateY(1px); }
+
+.foot {
+  margin-top: 2.5rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--border);
+}
+
+.hidden { display: none !important; }

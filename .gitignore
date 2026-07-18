@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Demo C runtime toggle state (regenerated on boot)
+demo-c-dynamic-switch/server/state.json
+demo-c-dynamic-switch/server/state.json.tmp
+
+# Local Claude Code settings
+.claude/settings.local.json
