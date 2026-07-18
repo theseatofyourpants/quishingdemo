@@ -1,0 +1,30 @@
+# Example Cloudflare tunnel ingress for the demo kit.
+#
+# One public hostname per demo port. Copy the ingress rules into your tunnel's
+# config.yml (locally-managed tunnel), or add the same hostname -> service
+# mappings in the Zero Trust dashboard (remotely-managed tunnel).
+#
+# Whatever hostnames you use here MUST match the PUBLIC_* values in deploy/.env,
+# because the QR codes encode those URLs.
+
+tunnel: <YOUR-TUNNEL-ID>
+credentials-file: /root/.cloudflared/<YOUR-TUNNEL-ID>.json
+
+ingress:
+  # If cloudflared runs on the NAS host, use localhost:<port>.
+  # If cloudflared runs as a container on the same Docker network as the
+  # `demos` service, use http://demos:<port> instead.
+  - hostname: qr.example.com
+    service: http://localhost:10000     # hub
+  - hostname: qr-a.example.com
+    service: http://localhost:10001     # Demo A
+  - hostname: qr-b.example.com
+    service: http://localhost:10002     # Demo B
+  - hostname: qr-c.example.com
+    service: http://localhost:10003     # Demo C
+  - hostname: qr-d.example.com
+    service: http://localhost:10004     # Demo D
+  - hostname: qr-e.example.com
+    service: http://localhost:10005     # Demo E
+  # Everything else 404s.
+  - service: http_status:404

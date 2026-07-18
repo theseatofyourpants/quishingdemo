@@ -1,0 +1,39 @@
+# QR Quishing Demo Kit — one container, all five demos on ports 10000-10005.
+#
+#   cd deploy
+#   cp .env.example .env      # then edit PUBLIC_* to your Cloudflare hostnames
+#   docker compose up -d --build
+#
+# Point your Cloudflare tunnel at http://<nas-ip>:10000 .. :10005
+# (see cloudflared.example.yml).
+
+services:
+  demos:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    image: qr-quishing-demos
+    container_name: qr-quishing-demos
+    restart: unless-stopped
+    # Host:container. Change the host side if these ports are taken on the NAS.
+    ports:
+      - "10000:10000"   # hub
+      - "10001:10001"   # Demo A — two identical codes + poll
+      - "10002:10002"   # Demo B — URL-preview defeat
+      - "10003:10003"   # Demo C — dynamic-QR switch
+      - "10004:10004"   # Demo D — quishing-in-PDF
+      - "10005:10005"   # Demo E — Wi-Fi reveal
+    environment:
+      # Public URLs your tunnel maps to each port. QRs encode these at startup.
+      PUBLIC_HUB: ${PUBLIC_HUB:-http://localhost:10000}
+      PUBLIC_A:   ${PUBLIC_A:-http://localhost:10001}
+      PUBLIC_B:   ${PUBLIC_B:-http://localhost:10002}
+      PUBLIC_C:   ${PUBLIC_C:-http://localhost:10003}
+      PUBLIC_D:   ${PUBLIC_D:-http://localhost:10004}
+      PUBLIC_E:   ${PUBLIC_E:-http://localhost:10005}
+      # Secret protecting Demo C's admin toggle. CHANGE THIS.
+      ADMIN_TOKEN: ${ADMIN_TOKEN:-changeme}
+      # Demo E Wi-Fi credentials (your own AP).
+      WIFI_SSID:     ${WIFI_SSID:-Conference_Free_WiFi}
+      WIFI_AUTH:     ${WIFI_AUTH:-WPA}
+      WIFI_PASSWORD: ${WIFI_PASSWORD:-letmein-demo-2026}

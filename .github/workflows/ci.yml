@@ -1,0 +1,73 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  native-smoke:
+    name: Native smoke (serve.py)
+    runs-on: ubuntu-latest
+    env:
+      ADMIN_TOKEN: citest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Start the stack and smoke test
+        run: |
+          # Start in the same step so the server is guaranteed alive during the
+          # probe (smoke_test.py waits for readiness on its own).
+          nohup python deploy/serve.py > serve.log 2>&1 &
+          echo "started serve.py pid $!"
+          python deploy/smoke_test.py
+
+      - name: Server log (on failure)
+        if: failure()
+        run: cat serve.log || true
+
+  docker:
+    name: Build image and run container
+    runs-on: ubuntu-latest
+    env:
+      ADMIN_TOKEN: citest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Build image
+        run: docker build -f deploy/Dockerfile -t qr-quishing-demos .
+
+      - name: Run container
+        run: |
+          docker run -d --name demos \
+            -p 10000-10005:10000-10005 \
+            -e ADMIN_TOKEN=${ADMIN_TOKEN} \
+            -e PUBLIC_A=https://qr-a.example.com \
+            -e PUBLIC_B=https://qr-b.example.com \
+            -e PUBLIC_C=https://qr-c.example.com \
+            -e PUBLIC_D=https://qr-d.example.com \
+            -e PUBLIC_E=https://qr-e.example.com \
+            qr-quishing-demos
+
+      - name: Smoke test against the container
+        run: python deploy/smoke_test.py
+
+      - name: Container logs (always)
+        if: always()
+        run: docker logs demos || true
+
+      - name: Tear down
+        if: always()
+        run: docker rm -f demos || true
