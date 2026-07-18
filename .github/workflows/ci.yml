@@ -22,13 +22,13 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Start the demo stack
+      - name: Start the stack and smoke test
         run: |
+          # Start in the same step so the server is guaranteed alive during the
+          # probe (smoke_test.py waits for readiness on its own).
           nohup python deploy/serve.py > serve.log 2>&1 &
           echo "started serve.py pid $!"
-
-      - name: Smoke test all demos
-        run: python deploy/smoke_test.py
+          python deploy/smoke_test.py
 
       - name: Server log (on failure)
         if: failure()

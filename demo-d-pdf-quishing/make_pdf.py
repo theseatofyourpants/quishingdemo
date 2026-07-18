@@ -17,11 +17,12 @@ Run:
 import os
 import sys
 
-from reportlab.lib import rl_config
-
 # Deterministic output: fixed creation date + document ID, so regenerating the
 # PDF from the same config produces byte-identical output (no git churn, and CI
-# can rebuild it without changing tracked bytes).
+# can rebuild it without changing tracked bytes). Must be set BEFORE importing
+# reportlab.pdfgen.canvas, which reads these values at import time.
+from reportlab import rl_config                    # noqa: E402
+
 rl_config.invariant = 1
 
 from reportlab.lib.colors import HexColor          # noqa: E402
