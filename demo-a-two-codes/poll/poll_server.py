@@ -83,6 +83,10 @@ def create_app():
     def shared(f):
         return send_from_directory(SHARED_DIR, f)
 
+    @app.route("/healthz")
+    def healthz():
+        return {"ok": True, "demo": "a"}
+
     # ---- poll pages ------------------------------------------------------
     @app.route("/poll")
     def projector():

@@ -129,6 +129,11 @@ def admin_set():
     return {"ok": True, "current": key}
 
 
+@app.route("/healthz")
+def healthz():
+    return {"ok": True, "demo": "c"}
+
+
 @app.route("/")
 def index():
     return Response(

@@ -17,10 +17,17 @@ Run:
 import os
 import sys
 
-from reportlab.lib.colors import HexColor
-from reportlab.lib.pagesizes import LETTER
-from reportlab.lib.units import inch
-from reportlab.pdfgen import canvas
+from reportlab.lib import rl_config
+
+# Deterministic output: fixed creation date + document ID, so regenerating the
+# PDF from the same config produces byte-identical output (no git churn, and CI
+# can rebuild it without changing tracked bytes).
+rl_config.invariant = 1
+
+from reportlab.lib.colors import HexColor          # noqa: E402
+from reportlab.lib.pagesizes import LETTER         # noqa: E402
+from reportlab.lib.units import inch               # noqa: E402
+from reportlab.pdfgen import canvas                # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, ".."))
