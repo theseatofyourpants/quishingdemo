@@ -10,3 +10,6 @@ demo-c-dynamic-switch/server/state.json.tmp
 
 # Local Claude Code settings
 .claude/settings.local.json
+
+# Deployment secrets (copy from deploy/.env.example)
+deploy/.env

@@ -27,7 +27,50 @@ exploitation.
 
 ---
 
-## Quick start
+## Deploy with Docker (NAS + Cloudflare tunnel)
+
+One container runs all five demos, each on its own port in the 10000 range, so
+you can front them with a Cloudflare tunnel — one hostname per demo.
+
+| Port | Demo | Public hostname (example) |
+|---|---|---|
+| 10000 | Hub index (links to all) | `qr.example.com` |
+| 10001 | A — two identical codes + live poll | `qr-a.example.com` |
+| 10002 | B — URL-preview defeat | `qr-b.example.com` |
+| 10003 | C — dynamic-QR switch | `qr-c.example.com` |
+| 10004 | D — quishing-in-PDF | `qr-d.example.com` |
+| 10005 | E — Wi-Fi reveal | `qr-e.example.com` |
+
+```bash
+cd deploy
+cp .env.example .env        # set PUBLIC_* to your tunnel hostnames + ADMIN_TOKEN
+docker compose up -d --build
+```
+
+**The QR codes encode the `PUBLIC_*` URLs** and are regenerated from `.env`
+every time the container starts, so a phone scanning them reaches your tunnel —
+not `localhost`. Set each `PUBLIC_*` to the hostname your tunnel maps to that
+port before you generate anything for the talk.
+
+Point your Cloudflare tunnel at the container's ports (map hostname → port); a
+ready-to-edit ingress file is in
+[`deploy/cloudflared.example.yml`](deploy/cloudflared.example.yml). If
+`cloudflared` runs as its own container on the same Docker network, use
+`http://demos:1000X` as the service instead of `http://localhost:1000X`.
+
+Build the image without compose:
+
+```bash
+docker build -f deploy/Dockerfile -t qr-quishing-demos .
+docker run -d -p 10000-10005:10000-10005 --env-file deploy/.env qr-quishing-demos
+```
+
+Health check: each service answers `GET /healthz`. Demo C's toggle resets to
+**benign** on every container start (so you always begin a talk clean).
+
+---
+
+## Quick start (single demo, no Docker)
 
 ```bash
 # 1. Install backend deps (for Demo C, Demo D, and Demo A's optional poll)
@@ -48,9 +91,11 @@ a one-file edit followed by one command.
 - **A — optional live poll:**
   ```bash
   cd demo-a-two-codes/poll && python poll_server.py
-  # projector: http://<laptop-ip>:5000/   ·   phones: http://<laptop-ip>:5000/vote
+  # stage:  http://<laptop-ip>:5000/       (both codes + reveal)
+  # poll:   http://<laptop-ip>:5000/poll   (animated tally on the projector)
+  # phones: http://<laptop-ip>:5000/vote
   ```
-  Speaker keys on the projector: <kbd>R</kbd> reveal, <kbd>0</kbd> reset.
+  Speaker keys on the poll projector: <kbd>R</kbd> reveal, <kbd>0</kbd> reset.
 - **B — no backend:** open `demo-b-preview-defeat/index.html`. <kbd>R</kbd>
   exposes the homoglyph, <kbd>Q</kbd> toggles URL ↔ QR.
 - **C — redirector + admin toggle:**
@@ -81,10 +126,16 @@ a one-file edit followed by one command.
 │   └── qrgen/qrgen.py         # QR + WIFI-payload generator (importable + CLI)
 ├── generate_assets.py         # regenerate every QR and the PDF from config
 ├── requirements.txt
-├── demo-a-two-codes/          # stage slide, reveal, landing pages, live poll
-├── demo-b-preview-defeat/     # single page, URL ↔ QR toggle + homoglyph reveal
+├── deploy/                    # Docker image, compose, .env + cloudflared examples
+│   ├── serve.py               # runs all demos on ports 10000-10005 (waitress)
+│   ├── Dockerfile
+│   ├── docker-compose.yml
+│   ├── .env.example
+│   └── cloudflared.example.yml
+├── demo-a-two-codes/          # stage slide, reveal landings, live poll app
+├── demo-b-preview-defeat/     # URL ↔ QR toggle + homoglyph reveal + /gotcha page
 ├── demo-c-dynamic-switch/     # Flask redirector + JSON store + admin toggle
-├── demo-d-pdf-quishing/       # reportlab PDF with QR trapped in an image
+├── demo-d-pdf-quishing/       # reportlab PDF + download/reveal pages
 └── demo-e-wifi-reveal/        # join QR + captive-portal reveal page
 ```
 
@@ -99,9 +150,11 @@ python shared/qrgen/qrgen.py --wifi --ssid MyAP --auth WPA --password pw wifi.pn
 
 ## Guardrails (keep it clean)
 
-- **Every destination is a domain you own.** Defaults are RFC-reserved
-  `*.example` placeholders that resolve nowhere. Register the Demo B lookalike
-  yourself before the talk so nothing points at a real brand.
+- **Every destination is a domain you own.** QR targets come from the
+  `PUBLIC_*` env vars (default `localhost` for local testing); set them to your
+  own tunnel hostnames. The Demo B homograph display uses RFC-reserved
+  `*.example` names — register a real lookalike you own before the talk so
+  nothing points at a real brand.
 - **No credential capture, ever.** Landing pages *state* what would have
   happened; they don't do it.
 - **The Wi-Fi demo terminates at a reveal page.** No traffic interception is
