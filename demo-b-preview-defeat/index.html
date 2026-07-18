@@ -11,13 +11,15 @@
       align-items:center; justify-content:center; }
     .url-line {
       font-family: ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
-      font-size: clamp(1.6rem, 6.5vw, 4rem);
+      font-size: clamp(1rem, 4vw, 2.9rem);
       font-weight: 700;
       background: #fff; color:#0b0f1a;
       padding: 0.5em 0.7em; border-radius: 14px;
-      display: inline-flex; align-items: center;
-      word-break: break-all;
+      display: inline-block;
+      white-space: nowrap;      /* keep the URL on one clean line */
+      max-width: 100%;
     }
+    .stage { max-width: 100%; overflow-x: auto; }
     .url-line .scheme { color:#16a34a; }
     .homoglyph { position: relative; }
     body.exposed .homoglyph {
