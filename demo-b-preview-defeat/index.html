@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spot the fake — URL vs QR</title>
+  <link rel="stylesheet" href="../shared/landing.css">
+  <style>
+    body { justify-content: flex-start; padding-top: 5vh; }
+    .stage { min-height: clamp(220px, 40vh, 460px); display:flex; flex-direction:column;
+      align-items:center; justify-content:center; }
+    .url-line {
+      font-family: ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+      font-size: clamp(1.6rem, 6.5vw, 4rem);
+      font-weight: 700;
+      background: #fff; color:#0b0f1a;
+      padding: 0.5em 0.7em; border-radius: 14px;
+      display: inline-flex; align-items: center;
+      word-break: break-all;
+    }
+    .url-line .scheme { color:#16a34a; }
+    .homoglyph { position: relative; }
+    body.exposed .homoglyph {
+      background: #fde047; border-radius: 4px;
+      box-shadow: 0 0 0 3px #f59e0b;
+    }
+    .callout { margin-top: 1.4rem; font-size: clamp(1rem, 2.4vw, 1.5rem);
+      color: var(--warn); font-weight: 700; opacity:0; transition:opacity .3s; }
+    body.exposed .callout { opacity: 1; }
+    .controls { margin-top: 2rem; display:flex; gap:1rem; flex-wrap:wrap; justify-content:center; }
+    button.ghost { background: transparent; color: var(--accent);
+      border: 2px solid var(--border); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <p class="eyebrow">QR security demo · Demo B</p>
+    <h1 id="title">Same link. Can you spot the fake?</h1>
+    <p class="lede" id="lede">A human can be taught to catch a lookalike domain
+      when it's <em>typed</em>. Watch what happens when it's a QR.</p>
+
+    <div class="panel stage">
+      <!-- URL mode -->
+      <div id="urlMode">
+        <div class="url-line">
+          <span class="scheme">https://</span><!--
+       -->your&#8209;b<span class="homoglyph">&#x0430;</span>nk.example<!--
+       --><span>/login</span>
+        </div>
+        <div class="callout">
+          That highlighted character is a Cyrillic “а” (U+0430), not a Latin “a”
+          (U+0061). Different domain. Different owner. Your eye reads “bank.”
+        </div>
+      </div>
+
+      <!-- QR mode -->
+      <div id="qrMode" class="hidden">
+        <img class="qr" src="assets/lookalike.png" alt="QR code for the lookalike URL">
+        <div class="callout" style="opacity:1; color:var(--muted);">
+          Same lookalike URL — now encoded. No character to inspect. No preview.
+          Nothing to spot. You just scan and go.
+        </div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button id="exposeBtn" onclick="expose()">Reveal the trick</button>
+      <button class="ghost" id="toggleBtn" onclick="toggleMode()">Show it as a QR →</button>
+    </div>
+    <p class="foot">Awareness / education material — lookalike domain is the speaker's own</p>
+  </div>
+
+  <script>
+    let qr = false;
+    function expose() { document.body.classList.add('exposed'); }
+    function toggleMode() {
+      qr = !qr;
+      document.getElementById('urlMode').classList.toggle('hidden', qr);
+      document.getElementById('qrMode').classList.toggle('hidden', !qr);
+      document.getElementById('toggleBtn').textContent =
+        qr ? '← Show it as a URL' : 'Show it as a QR →';
+      document.getElementById('exposeBtn').style.visibility = qr ? 'hidden' : 'visible';
+      document.getElementById('title').textContent =
+        qr ? 'Now spot the fake.' : 'Same link. Can you spot the fake?';
+    }
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'r' || e.key === 'R') expose();
+      if (e.key === 'q' || e.key === 'Q' || e.key === ' ') { e.preventDefault(); toggleMode(); }
+    });
+  </script>
+</body>
+</html>

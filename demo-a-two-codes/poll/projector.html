@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Live vote — which QR is safe?</title>
+  <style>
+    /* Self-contained so the poll server needs no static-file wiring. */
+    :root { --safe:#22c55e; --danger:#ef4444; --accent:#60a5fa; }
+    body { margin:0; min-height:100vh; background:#0b0f1a; color:#eef2ff;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      padding:4vh 5vw; text-align:center; }
+    h1 { font-size:clamp(2rem,6vw,4.5rem); margin:0 0 0.2em; font-weight:800; letter-spacing:-0.02em; }
+    .sub { color:#9aa7c7; font-size:clamp(1rem,2.4vw,1.6rem); margin-bottom:2rem; }
+    .bars { width:min(90vw,1000px); display:flex; flex-direction:column; gap:1.6rem; }
+    .row { text-align:left; }
+    .row .top { display:flex; justify-content:space-between; align-items:baseline;
+      font-size:clamp(1.4rem,3.5vw,2.4rem); font-weight:800; margin-bottom:0.4rem; }
+    .track { height:clamp(38px,7vw,72px); background:#131a2b; border:1px solid #26304a;
+      border-radius:14px; overflow:hidden; }
+    .fill { height:100%; width:0%; border-radius:14px 0 0 14px;
+      transition:width 0.6s cubic-bezier(.22,.61,.36,1); }
+    .fill.a { background:linear-gradient(90deg,#3b82f6,#60a5fa); }
+    .fill.b { background:linear-gradient(90deg,#f59e0b,#f97316); }
+    body.revealed .fill.a { background:linear-gradient(90deg,#16a34a,#22c55e); }
+    body.revealed .fill.b { background:linear-gradient(90deg,#dc2626,#ef4444); }
+    .tag { font-size:clamp(0.9rem,2vw,1.3rem); font-weight:700; opacity:0; transition:opacity .4s; }
+    body.revealed .tag { opacity:1; }
+    .tag.safe { color:var(--safe); } .tag.danger { color:var(--danger); }
+    .join { margin-top:2.5rem; color:#9aa7c7; font-size:clamp(1rem,2.2vw,1.4rem); }
+    .join b { color:#eef2ff; }
+    .total { margin-top:0.5rem; color:#26304a; font-size:0.9rem; letter-spacing:0.12em; text-transform:uppercase; }
+  </style>
+</head>
+<body>
+  <h1>Which one is safe?</h1>
+  <div class="sub">Scan to vote, or open <b id="voteUrl">/vote</b> on your phone</div>
+
+  <div class="bars">
+    <div class="row">
+      <div class="top"><span>A <span class="tag safe">✓ actually safe</span></span><span id="pctA">0%</span></div>
+      <div class="track"><div class="fill a" id="fillA"></div></div>
+    </div>
+    <div class="row">
+      <div class="top"><span>B <span class="tag danger">✕ actually malicious</span></span><span id="pctB">0%</span></div>
+      <div class="track"><div class="fill b" id="fillB"></div></div>
+    </div>
+  </div>
+
+  <div class="total"><span id="total">0</span> votes</div>
+  <div class="join">Speaker keys: <b>R</b> reveal · <b>0</b> reset</div>
+
+  <script>
+    document.getElementById('voteUrl').textContent = location.origin + '/vote';
+
+    function render(state) {
+      const a = state.tally.a, b = state.tally.b, total = a + b;
+      const pa = total ? Math.round(a / total * 100) : 0;
+      const pb = total ? 100 - pa : 0;
+      document.getElementById('fillA').style.width = (total ? pa : 0) + '%';
+      document.getElementById('fillB').style.width = (total ? pb : 0) + '%';
+      document.getElementById('pctA').textContent = pa + '%';
+      document.getElementById('pctB').textContent = pb + '%';
+      document.getElementById('total').textContent = total;
+      document.body.classList.toggle('revealed', !!state.revealed);
+    }
+
+    const es = new EventSource('/stream');
+    es.onmessage = (e) => { try { render(JSON.parse(e.data)); } catch (_) {} };
+
+    async function post(path) { try { await fetch(path, {method:'POST'}); } catch(_){} }
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'r' || e.key === 'R') post('/api/reveal');
+      if (e.key === '0') post('/api/reset');
+    });
+  </script>
+</body>
+</html>
