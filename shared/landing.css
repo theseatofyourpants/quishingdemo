@@ -95,7 +95,7 @@ h1 {
 }
 
 .disclaimer {
-  margin-top: 2.2rem;
+  margin: 2.2rem auto 0;   /* auto sides so the 46ch block stays centered */
   font-size: clamp(0.85rem, 1.8vw, 1.05rem);
   color: var(--muted);
   max-width: 46ch;
