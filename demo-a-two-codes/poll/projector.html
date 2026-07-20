@@ -5,36 +5,48 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Live vote — which QR is safe?</title>
   <style>
-    /* Self-contained so the poll server needs no static-file wiring. */
-    :root { --safe:#22c55e; --danger:#ef4444; --accent:#60a5fa; }
-    body { margin:0; min-height:100vh; background:#0b0f1a; color:#eef2ff;
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    /* Self-contained (poll server needs no static-file wiring) — Huntress brand. */
+    :root {
+      --bg:#06070a; --panel:#0d1015; --border:#20252d; --ink:#ffffff; --muted:#a7b0bc;
+      --cyan:#14e0d4; --magenta:#ff2e9a; --lime:#aeee3c;
+      --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    }
+    body { margin:0; min-height:100vh; color:var(--ink); font-family:var(--sans);
+      background:radial-gradient(1000px 560px at 50% -12%, rgba(20,224,212,0.10), transparent 62%), var(--bg);
       display:flex; flex-direction:column; align-items:center; justify-content:center;
       padding:4vh 5vw; text-align:center; }
-    h1 { font-size:clamp(2rem,6vw,4.5rem); margin:0 0 0.2em; font-weight:800; letter-spacing:-0.02em; }
-    .sub { color:#9aa7c7; font-size:clamp(1rem,2.4vw,1.6rem); margin-bottom:2rem; }
+    .brand { position:fixed; top:1.5rem; left:1.7rem; font-weight:800; font-size:0.9rem;
+      letter-spacing:0.24em; padding-left:0.7rem; border-left:3px solid var(--cyan); }
+    h1 { font-size:clamp(2rem,6vw,4.5rem); margin:0 0 0.2em; font-weight:800;
+      letter-spacing:-0.01em; text-transform:uppercase; }
+    .sub { color:var(--muted); font-size:clamp(1rem,2.4vw,1.6rem); margin-bottom:2rem; }
+    .sub b { color:var(--cyan); }
     .bars { width:min(90vw,1000px); display:flex; flex-direction:column; gap:1.6rem; }
     .row { text-align:left; }
     .row .top { display:flex; justify-content:space-between; align-items:baseline;
-      font-size:clamp(1.4rem,3.5vw,2.4rem); font-weight:800; margin-bottom:0.4rem; }
-    .track { height:clamp(38px,7vw,72px); background:#131a2b; border:1px solid #26304a;
-      border-radius:14px; overflow:hidden; }
-    .fill { height:100%; width:0%; border-radius:14px 0 0 14px;
+      font-size:clamp(1.4rem,3.5vw,2.4rem); font-weight:800; margin-bottom:0.4rem;
+      text-transform:uppercase; font-variant-numeric:tabular-nums; }
+    .track { height:clamp(38px,7vw,72px); background:var(--panel); border:1px solid var(--border);
+      border-radius:4px; overflow:hidden; }
+    .fill { height:100%; width:0%; border-radius:3px 0 0 3px;
       transition:width 0.6s cubic-bezier(.22,.61,.36,1); }
-    .fill.a { background:linear-gradient(90deg,#3b82f6,#60a5fa); }
-    .fill.b { background:linear-gradient(90deg,#f59e0b,#f97316); }
-    body.revealed .fill.a { background:linear-gradient(90deg,#16a34a,#22c55e); }
-    body.revealed .fill.b { background:linear-gradient(90deg,#dc2626,#ef4444); }
-    .tag { font-size:clamp(0.9rem,2vw,1.3rem); font-weight:700; opacity:0; transition:opacity .4s; }
+    .fill.a, .fill.b { background:linear-gradient(90deg,#2b323d,#4a5361); }       /* neutral pre-reveal */
+    body.revealed .fill.a { background:linear-gradient(90deg,#0b8f88,#14e0d4); }  /* teal = safe */
+    body.revealed .fill.b { background:linear-gradient(90deg,#c01f75,#ff2e9a); }  /* magenta = malicious */
+    .tag { font-size:clamp(0.9rem,2vw,1.3rem); font-weight:800; letter-spacing:0.03em;
+      opacity:0; transition:opacity .4s; }
     body.revealed .tag { opacity:1; }
-    .tag.safe { color:var(--safe); } .tag.danger { color:var(--danger); }
-    .join { margin-top:2.5rem; color:#9aa7c7; font-size:clamp(1rem,2.2vw,1.4rem); }
-    .join b { color:#eef2ff; }
-    .total { margin-top:0.5rem; color:#26304a; font-size:0.9rem; letter-spacing:0.12em; text-transform:uppercase; }
+    .tag.safe { color:var(--cyan); } .tag.danger { color:var(--magenta); }
+    .hl-t { color:var(--cyan); } .hl-m { color:var(--magenta); }
+    .join { margin-top:2.5rem; color:var(--muted); font-size:clamp(1rem,2.2vw,1.4rem); }
+    .join b { color:var(--cyan); }
+    .total { margin-top:0.5rem; color:#4a525f; font-size:0.9rem; letter-spacing:0.16em;
+      text-transform:uppercase; }
   </style>
 </head>
 <body>
-  <h1>Which one is safe?</h1>
+  <div class="brand">HUNTRESS</div>
+  <h1>Which one is <span class="hl-t">safe</span>?</h1>
   <div class="sub">Scan to vote, or open <b id="voteUrl">/vote</b> on your phone</div>
 
   <div class="bars">

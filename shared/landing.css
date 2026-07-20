@@ -1,19 +1,37 @@
 /* Shared styling for every demo landing / reveal page.
- * Design goals from the brief: legible from the back row of a 10,000-seat
- * room, big visual reveals, obviously an awareness demo (never a real login).
+ * Huntress-branded: near-black ground, cyan primary, magenta + lime pops,
+ * heavy uppercase headings. Legible from the back row; obviously an awareness
+ * demo, never a real login. QR codes stay black-on-white for scannability.
+ *
+ * Brand tokens live in :root — swap these to re-skin every page at once.
  */
 
 :root {
-  --bg: #0b0f1a;
-  --bg-panel: #131a2b;
-  --ink: #eef2ff;
-  --muted: #9aa7c7;
-  --safe: #22c55e;
-  --danger: #ef4444;
-  --warn: #f59e0b;
-  --accent: #60a5fa;
-  --border: #26304a;
+  /* Huntress palette (sampled from huntress.com) */
+  --bg: #06070a;            /* near-black ground */
+  --bg-panel: #0d1015;      /* lifted panel */
+  --ink: #ffffff;
+  --muted: #a7b0bc;         /* light-grey body text */
+
+  --cyan: #14e0d4;          /* Huntress primary — buttons, links, wordmark */
+  --magenta: #ff2e9a;       /* hot-pink pop */
+  --lime: #aeee3c;          /* lime pop */
+  --amber: #f5a623;         /* caution (semantic only) */
+
+  /* Semantic aliases used across the demos.
+   * Teal-forward: safe/positive reads teal, malicious reads magenta.
+   * Lime is reserved for tiny accents only (e.g. the safe check-mark). */
+  --accent: var(--cyan);
+  --safe:   var(--cyan);    /* "safe" reveals — teal, not green */
+  --danger: var(--magenta); /* "malicious" reveals */
+  --warn:   var(--amber);
+
+  --border: #20252d;
   --maxw: 900px;
+
+  --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+  --mono: "SF Mono", ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
 }
 
 * { box-sizing: border-box; }
@@ -21,10 +39,11 @@
 html, body {
   margin: 0;
   padding: 0;
-  background: var(--bg);
+  background:
+    radial-gradient(1000px 560px at 50% -12%, rgba(20,224,212,0.10), transparent 62%),
+    var(--bg);
   color: var(--ink);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
-    Arial, sans-serif;
+  font-family: var(--sans);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -38,36 +57,56 @@ body {
   text-align: center;
 }
 
+/* Corporate wordmark, fixed top-left on every page (text placeholder). */
+body::before {
+  content: "HUNTRESS";
+  position: fixed;
+  top: 1.5rem;
+  left: 1.7rem;
+  z-index: 10;
+  font-weight: 800;
+  font-size: 0.9rem;
+  letter-spacing: 0.24em;
+  color: var(--ink);
+  padding-left: 0.7rem;
+  border-left: 3px solid var(--cyan);
+  line-height: 1;
+}
+
 .wrap { width: 100%; max-width: var(--maxw); }
 
 .eyebrow {
   text-transform: uppercase;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.24em;
   font-size: clamp(0.8rem, 1.6vw, 1.05rem);
-  color: var(--muted);
-  margin: 0 0 0.6em;
+  font-weight: 700;
+  color: var(--cyan);
+  margin: 0 0 0.75em;
 }
 
 h1 {
-  font-size: clamp(2.2rem, 7vw, 5rem);
-  line-height: 1.02;
+  font-size: clamp(2.3rem, 7vw, 5rem);
+  line-height: 0.98;
   margin: 0 0 0.35em;
   font-weight: 800;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  text-wrap: balance;
 }
 
 .lede {
   font-size: clamp(1.1rem, 2.8vw, 1.7rem);
   color: var(--muted);
-  line-height: 1.4;
+  line-height: 1.45;
   margin: 0 auto 1.4em;
-  max-width: 34ch;
+  max-width: 36ch;
 }
 
 .panel {
   background: var(--bg-panel);
   border: 1px solid var(--border);
-  border-radius: 20px;
+  border-top: 2px solid var(--cyan);   /* angular Huntress top accent */
+  border-radius: 4px;
   padding: clamp(1.4rem, 4vw, 2.6rem);
   margin: 1.2rem auto;
 }
@@ -76,18 +115,25 @@ h1 {
   display: inline-flex;
   align-items: center;
   gap: 0.5em;
-  padding: 0.5em 1.1em;
-  border-radius: 999px;
-  font-weight: 700;
-  font-size: clamp(0.95rem, 2vw, 1.25rem);
-  letter-spacing: 0.02em;
+  padding: 0.5em 1.05em;
+  border-radius: 3px;
+  font-weight: 800;
+  font-size: clamp(0.9rem, 1.9vw, 1.15rem);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
-.badge.safe   { background: rgba(34,197,94,0.15);  color: var(--safe);   border: 1px solid rgba(34,197,94,0.4); }
-.badge.danger { background: rgba(239,68,68,0.15);  color: var(--danger); border: 1px solid rgba(239,68,68,0.4); }
-.badge.warn   { background: rgba(245,158,11,0.15); color: var(--warn);   border: 1px solid rgba(245,158,11,0.4); }
+.badge.safe   { background: rgba(20,224,212,0.12); color: var(--cyan);    border: 1px solid rgba(20,224,212,0.45); }
+.badge.danger { background: rgba(255,46,154,0.14); color: var(--magenta); border: 1px solid rgba(255,46,154,0.45); }
+.badge.warn   { background: rgba(245,166,35,0.14); color: var(--amber);   border: 1px solid rgba(245,166,35,0.45); }
+/* sole sparing use of green: the reassuring check-mark on safe badges */
+.badge .tick  { color: var(--lime); }
+
+/* highlight key words in headings/titles */
+.hl-t { color: var(--cyan); }
+.hl-m { color: var(--magenta); }
 
 .big-domain {
-  font-family: "SF Mono", ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+  font-family: var(--mono);
   font-size: clamp(1.4rem, 5vw, 3.2rem);
   font-weight: 700;
   word-break: break-all;
@@ -99,7 +145,7 @@ h1 {
   font-size: clamp(0.85rem, 1.8vw, 1.05rem);
   color: var(--muted);
   max-width: 46ch;
-  line-height: 1.5;
+  line-height: 1.55;
 }
 .disclaimer strong { color: var(--ink); }
 
@@ -108,32 +154,40 @@ h1 {
   height: auto;
   background: #fff;
   padding: 18px;
-  border-radius: 16px;
+  border-radius: 6px;
   display: block;
   margin: 1rem auto;
 }
 
 button, .btn {
   font: inherit;
-  font-weight: 700;
-  font-size: clamp(1rem, 2.4vw, 1.35rem);
+  font-weight: 800;
+  font-size: clamp(0.95rem, 2.2vw, 1.25rem);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
   color: var(--bg);
-  background: var(--accent);
+  background: var(--cyan);
   border: none;
-  border-radius: 14px;
+  border-radius: 2px;
   padding: 0.7em 1.6em;
   cursor: pointer;
   transition: transform 0.08s ease, filter 0.15s ease;
 }
 button:hover, .btn:hover { filter: brightness(1.08); }
 button:active, .btn:active { transform: translateY(1px); }
+button:focus-visible, .btn:focus-visible,
+a:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; }
 
 .foot {
   margin-top: 2.5rem;
-  font-size: 0.8rem;
-  letter-spacing: 0.12em;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--border);
+  color: #4a525f;
 }
 
 .hidden { display: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}

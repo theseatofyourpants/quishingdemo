@@ -118,7 +118,7 @@ def hub_app():
  .card .d{{color:var(--muted);font-size:.95rem}}
 </style></head><body><div class="wrap">
 <p class="eyebrow">Awareness / education material</p>
-<h1>QR Quishing Demo Kit</h1>
+<h1>QR <span class="hl-m">Quishing</span> Demo Kit</h1>
 <p class="lede">Five safe demos. Every destination is a domain the speaker owns.</p>
 <div class="grid">{cards}</div>
 <p class="foot">A QR code is data, not code — it executes nothing</p>
