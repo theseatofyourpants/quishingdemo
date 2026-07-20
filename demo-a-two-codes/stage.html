@@ -28,16 +28,18 @@
     .code img { width: min(38vw, 340px); }
     .verdict {
       font-size: clamp(1.1rem, 2.6vw, 1.6rem);
-      font-weight: 700;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
       padding: 0.4em 1em;
-      border-radius: 999px;
+      border-radius: 3px;
       opacity: 0;
       transform: translateY(8px);
       transition: opacity 0.4s ease, transform 0.4s ease;
     }
     body.revealed .verdict { opacity: 1; transform: none; }
-    .verdict.safe   { background: rgba(34,197,94,0.15);  color: var(--safe);   border: 1px solid rgba(34,197,94,0.4); }
-    .verdict.danger { background: rgba(239,68,68,0.15);  color: var(--danger); border: 1px solid rgba(239,68,68,0.4); }
+    .verdict.safe   { background: rgba(174,238,60,0.14); color: var(--lime);    border: 1px solid rgba(174,238,60,0.45); }
+    .verdict.danger { background: rgba(255,46,154,0.14); color: var(--magenta); border: 1px solid rgba(255,46,154,0.45); }
     .controls { margin-top: 2.5rem; }
     .hint { color: var(--muted); font-size: clamp(1rem,2.2vw,1.4rem); margin-top: 0.5rem; }
   </style>
