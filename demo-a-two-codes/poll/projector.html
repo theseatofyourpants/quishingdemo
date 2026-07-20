@@ -30,14 +30,14 @@
       border-radius:4px; overflow:hidden; }
     .fill { height:100%; width:0%; border-radius:3px 0 0 3px;
       transition:width 0.6s cubic-bezier(.22,.61,.36,1); }
-    .fill.a { background:linear-gradient(90deg,#0b8f88,#14e0d4); }         /* neutral cyan */
-    .fill.b { background:linear-gradient(90deg,#3a4150,#5b6675); }         /* neutral slate */
-    body.revealed .fill.a { background:linear-gradient(90deg,#7bbf1f,#aeee3c); }  /* lime = safe */
+    .fill.a, .fill.b { background:linear-gradient(90deg,#2b323d,#4a5361); }       /* neutral pre-reveal */
+    body.revealed .fill.a { background:linear-gradient(90deg,#0b8f88,#14e0d4); }  /* teal = safe */
     body.revealed .fill.b { background:linear-gradient(90deg,#c01f75,#ff2e9a); }  /* magenta = malicious */
     .tag { font-size:clamp(0.9rem,2vw,1.3rem); font-weight:800; letter-spacing:0.03em;
       opacity:0; transition:opacity .4s; }
     body.revealed .tag { opacity:1; }
-    .tag.safe { color:var(--lime); } .tag.danger { color:var(--magenta); }
+    .tag.safe { color:var(--cyan); } .tag.danger { color:var(--magenta); }
+    .hl-t { color:var(--cyan); } .hl-m { color:var(--magenta); }
     .join { margin-top:2.5rem; color:var(--muted); font-size:clamp(1rem,2.2vw,1.4rem); }
     .join b { color:var(--cyan); }
     .total { margin-top:0.5rem; color:#4a525f; font-size:0.9rem; letter-spacing:0.16em;
@@ -46,7 +46,7 @@
 </head>
 <body>
   <div class="brand">HUNTRESS</div>
-  <h1>Which one is safe?</h1>
+  <h1>Which one is <span class="hl-t">safe</span>?</h1>
   <div class="sub">Scan to vote, or open <b id="voteUrl">/vote</b> on your phone</div>
 
   <div class="bars">

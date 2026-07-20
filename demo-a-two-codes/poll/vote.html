@@ -24,13 +24,14 @@
     .thanks { display:none; font-size:1.4rem; font-weight:800; text-transform:uppercase;
       letter-spacing:0.03em; color:var(--cyan); }
     .thanks.show { display:block; }
+    .hl-t { color:var(--cyan); }
     .foot { margin-top:2rem; font-size:0.72rem; letter-spacing:0.18em;
       text-transform:uppercase; color:#4a525f; }
   </style>
 </head>
 <body>
   <div class="brand">HUNTRESS</div>
-  <h1>Which QR is safe?</h1>
+  <h1>Which QR is <span class="hl-t">safe</span>?</h1>
   <p>Tap your guess.</p>
   <div class="choice" id="buttons">
     <button id="a" onclick="vote('a')">A</button>

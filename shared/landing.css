@@ -18,9 +18,11 @@
   --lime: #aeee3c;          /* lime pop */
   --amber: #f5a623;         /* caution (semantic only) */
 
-  /* Semantic aliases used across the demos */
+  /* Semantic aliases used across the demos.
+   * Teal-forward: safe/positive reads teal, malicious reads magenta.
+   * Lime is reserved for tiny accents only (e.g. the safe check-mark). */
   --accent: var(--cyan);
-  --safe:   var(--lime);    /* "safe" reveals */
+  --safe:   var(--cyan);    /* "safe" reveals — teal, not green */
   --danger: var(--magenta); /* "malicious" reveals */
   --warn:   var(--amber);
 
@@ -120,9 +122,15 @@ h1 {
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
-.badge.safe   { background: rgba(174,238,60,0.14); color: var(--lime);    border: 1px solid rgba(174,238,60,0.45); }
+.badge.safe   { background: rgba(20,224,212,0.12); color: var(--cyan);    border: 1px solid rgba(20,224,212,0.45); }
 .badge.danger { background: rgba(255,46,154,0.14); color: var(--magenta); border: 1px solid rgba(255,46,154,0.45); }
 .badge.warn   { background: rgba(245,166,35,0.14); color: var(--amber);   border: 1px solid rgba(245,166,35,0.45); }
+/* sole sparing use of green: the reassuring check-mark on safe badges */
+.badge .tick  { color: var(--lime); }
+
+/* highlight key words in headings/titles */
+.hl-t { color: var(--cyan); }
+.hl-m { color: var(--magenta); }
 
 .big-domain {
   font-family: var(--mono);

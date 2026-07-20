@@ -37,7 +37,7 @@
 <body>
   <div class="wrap">
     <p class="eyebrow">QR security demo · Demo B</p>
-    <h1 id="title">Same link. Can you spot the fake?</h1>
+    <h1 id="title">Same link. Can you spot <span class="hl-m">the fake</span>?</h1>
     <p class="lede" id="lede">A human can be taught to catch a lookalike domain
       when it's <em>typed</em>. Watch what happens when it's a QR.</p>
 
@@ -82,8 +82,9 @@
       document.getElementById('toggleBtn').textContent =
         qr ? '← Show it as a URL' : 'Show it as a QR →';
       document.getElementById('exposeBtn').style.visibility = qr ? 'hidden' : 'visible';
-      document.getElementById('title').textContent =
-        qr ? 'Now spot the fake.' : 'Same link. Can you spot the fake?';
+      document.getElementById('title').innerHTML =
+        qr ? 'Now spot <span class="hl-m">the fake</span>.'
+           : 'Same link. Can you spot <span class="hl-m">the fake</span>?';
     }
     document.addEventListener('keydown', (e) => {
       if (e.key === 'r' || e.key === 'R') expose();

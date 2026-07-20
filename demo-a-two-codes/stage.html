@@ -38,7 +38,7 @@
       transition: opacity 0.4s ease, transform 0.4s ease;
     }
     body.revealed .verdict { opacity: 1; transform: none; }
-    .verdict.safe   { background: rgba(174,238,60,0.14); color: var(--lime);    border: 1px solid rgba(174,238,60,0.45); }
+    .verdict.safe   { background: rgba(20,224,212,0.12); color: var(--cyan);    border: 1px solid rgba(20,224,212,0.45); }
     .verdict.danger { background: rgba(255,46,154,0.14); color: var(--magenta); border: 1px solid rgba(255,46,154,0.45); }
     .controls { margin-top: 2.5rem; }
     .hint { color: var(--muted); font-size: clamp(1rem,2.2vw,1.4rem); margin-top: 0.5rem; }
@@ -47,7 +47,7 @@
 <body>
   <div class="wrap">
     <p class="eyebrow">QR security demo · Demo A</p>
-    <h1>Which one is safe?</h1>
+    <h1>Which one is <span class="hl-t">safe</span>?</h1>
     <p class="lede">Two QR codes. One goes to your bank. One does not.
       Vote with your hands.</p>
 
