@@ -110,10 +110,10 @@ def hub_app():
  .grid{{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
    width:100%;max-width:900px;margin-top:1.5rem}}
  .card{{display:flex;flex-direction:column;gap:.4rem;text-align:left;
-   background:var(--bg-panel);border:1px solid var(--border);border-radius:16px;
-   padding:1.3rem 1.4rem;text-decoration:none;color:var(--ink);transition:border-color .15s}}
+   background:var(--bg-panel);border:1px solid var(--border);border-top:2px solid var(--accent);
+   border-radius:4px;padding:1.3rem 1.4rem;text-decoration:none;color:var(--ink);transition:border-color .15s}}
  .card:hover{{border-color:var(--accent)}}
- .card .k{{font-size:1.6rem;font-weight:800;color:var(--accent)}}
+ .card .k{{font-family:var(--display);font-size:1.8rem;font-weight:900;color:var(--accent)}}
  .card .t{{font-size:1.15rem;font-weight:700}}
  .card .d{{color:var(--muted);font-size:.95rem}}
 </style></head><body><div class="wrap">

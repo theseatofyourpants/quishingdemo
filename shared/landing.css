@@ -1,22 +1,26 @@
 /* Shared styling for every demo landing / reveal page.
- * Huntress-branded: near-black ground, cyan primary, magenta + lime pops,
- * heavy uppercase headings. Legible from the back row; obviously an awareness
- * demo, never a real login. QR codes stay black-on-white for scannability.
+ * Huntress-branded per the official style guide (Frontify): Blacksite ground,
+ * Huntress Teal primary, Raspberry Pi (magenta) accent, Cybercrime Lime used
+ * sparingly. Archivo Black titles (all caps), Funnel Sans body, IBM Plex Mono.
+ * Legible from the back row; obviously an awareness demo, never a real login.
+ * QR codes stay black-on-white for scannability.
  *
  * Brand tokens live in :root — swap these to re-skin every page at once.
  */
+@import url("fonts.css");
 
 :root {
-  /* Huntress palette (sampled from huntress.com) */
-  --bg: #06070a;            /* near-black ground */
-  --bg-panel: #0d1015;      /* lifted panel */
-  --ink: #ffffff;
-  --muted: #a7b0bc;         /* light-grey body text */
+  /* Official Huntress palette (Frontify style guide) */
+  --bg: #050707;            /* Blacksite — near-black ground (50%) */
+  --bg-panel: #0c1111;      /* lifted panel */
+  --ink: #dfe5e5;           /* Whitehat — primary text (25%) */
+  --muted: #93a2a2;         /* dimmed Whitehat for secondary text */
 
-  --cyan: #14e0d4;          /* Huntress primary — buttons, links, wordmark */
-  --magenta: #ff2e9a;       /* hot-pink pop */
-  --lime: #aeee3c;          /* lime pop */
-  --amber: #f5a623;         /* caution (semantic only) */
+  --cyan: #00d8e5;          /* Huntress Teal — primary accent (10%) */
+  --magenta: #ff009d;       /* Raspberry Pi — accent (<=5%) */
+  --lime: #7ee500;          /* Cybercrime Lime — sparing accent (<=5%) */
+  --amber: #fed21b;         /* Canary Yellow — caution (tertiary) */
+  --firewall: #f2522e;      /* Firewall — reserved */
 
   /* Semantic aliases used across the demos.
    * Teal-forward: safe/positive reads teal, malicious reads magenta.
@@ -26,12 +30,13 @@
   --danger: var(--magenta); /* "malicious" reveals */
   --warn:   var(--amber);
 
-  --border: #20252d;
+  --border: #1c2222;
   --maxw: 900px;
 
-  --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+  --display: "Archivo", "Arial Black", system-ui, sans-serif;   /* Black weight */
+  --sans: "Funnel Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Helvetica, Arial, sans-serif;
-  --mono: "SF Mono", ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+  --mono: "IBM Plex Mono", "SF Mono", ui-monospace, Menlo, Consolas, monospace;
 }
 
 * { box-sizing: border-box; }
@@ -40,10 +45,11 @@ html, body {
   margin: 0;
   padding: 0;
   background:
-    radial-gradient(1000px 560px at 50% -12%, rgba(20,224,212,0.10), transparent 62%),
+    radial-gradient(1000px 560px at 50% -12%, rgba(0,216,229,0.10), transparent 62%),
     var(--bg);
   color: var(--ink);
   font-family: var(--sans);
+  line-height: 1.35;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -57,19 +63,21 @@ body {
   text-align: center;
 }
 
-/* Corporate wordmark, fixed top-left on every page (text placeholder). */
+/* Corporate wordmark, fixed top-left on every page.
+ * Text placeholder in Archivo Black, teal-on-dark (an approved logo combo);
+ * swap for the official "Huntress Logo Wide White/Teal" SVG when available,
+ * keeping >=60px clear space per the style guide. */
 body::before {
   content: "HUNTRESS";
   position: fixed;
-  top: 1.5rem;
-  left: 1.7rem;
+  top: 1.6rem;
+  left: 1.8rem;
   z-index: 10;
-  font-weight: 800;
-  font-size: 0.9rem;
-  letter-spacing: 0.24em;
-  color: var(--ink);
-  padding-left: 0.7rem;
-  border-left: 3px solid var(--cyan);
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  color: var(--cyan);
   line-height: 1;
 }
 
@@ -85,19 +93,20 @@ body::before {
 }
 
 h1 {
+  font-family: var(--display);     /* Archivo Black */
   font-size: clamp(2.3rem, 7vw, 5rem);
-  line-height: 0.98;
-  margin: 0 0 0.35em;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-  text-transform: uppercase;
+  line-height: 0.85;               /* style guide: headline line-height 85% */
+  margin: 0 0 0.4em;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: uppercase;       /* Archivo Black, all caps */
   text-wrap: balance;
 }
 
 .lede {
   font-size: clamp(1.1rem, 2.8vw, 1.7rem);
   color: var(--muted);
-  line-height: 1.45;
+  line-height: 1.35;               /* body copy 120-140% */
   margin: 0 auto 1.4em;
   max-width: 36ch;
 }
@@ -117,14 +126,14 @@ h1 {
   gap: 0.5em;
   padding: 0.5em 1.05em;
   border-radius: 3px;
-  font-weight: 800;
+  font-weight: 700;
   font-size: clamp(0.9rem, 1.9vw, 1.15rem);
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
-.badge.safe   { background: rgba(20,224,212,0.12); color: var(--cyan);    border: 1px solid rgba(20,224,212,0.45); }
-.badge.danger { background: rgba(255,46,154,0.14); color: var(--magenta); border: 1px solid rgba(255,46,154,0.45); }
-.badge.warn   { background: rgba(245,166,35,0.14); color: var(--amber);   border: 1px solid rgba(245,166,35,0.45); }
+.badge.safe   { background: rgba(0,216,229,0.12); color: var(--cyan);    border: 1px solid rgba(0,216,229,0.45); }
+.badge.danger { background: rgba(255,0,157,0.14); color: var(--magenta); border: 1px solid rgba(255,0,157,0.45); }
+.badge.warn   { background: rgba(254,210,27,0.14); color: var(--amber);   border: 1px solid rgba(254,210,27,0.45); }
 /* sole sparing use of green: the reassuring check-mark on safe badges */
 .badge .tick  { color: var(--lime); }
 
@@ -160,8 +169,8 @@ h1 {
 }
 
 button, .btn {
-  font: inherit;
-  font-weight: 800;
+  font-family: var(--sans);
+  font-weight: 700;
   font-size: clamp(0.95rem, 2.2vw, 1.25rem);
   text-transform: uppercase;
   letter-spacing: 0.06em;
