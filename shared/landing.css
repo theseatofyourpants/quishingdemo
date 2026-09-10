@@ -63,22 +63,17 @@ body {
   text-align: center;
 }
 
-/* Corporate wordmark, fixed top-left on every page.
- * Text placeholder in Archivo Black, teal-on-dark (an approved logo combo);
- * swap for the official "Huntress Logo Wide White/Teal" SVG when available,
- * keeping >=60px clear space per the style guide. */
+/* Official Huntress wordmark (Wide Teal), fixed top-left on every page.
+ * Teal-on-dark is an approved logo combo; generous clear space per the guide. */
 body::before {
-  content: "HUNTRESS";
+  content: "";
   position: fixed;
   top: 1.6rem;
   left: 1.8rem;
   z-index: 10;
-  font-family: var(--display);
-  font-weight: 900;
-  font-size: 1.05rem;
-  letter-spacing: 0.02em;
-  color: var(--cyan);
-  line-height: 1;
+  width: 128px;
+  height: 29px;   /* logo is 654x149 (~4.39:1) */
+  background: url("huntress-logo-wide-teal.png") left center / contain no-repeat;
 }
 
 .wrap { width: 100%; max-width: var(--maxw); }
