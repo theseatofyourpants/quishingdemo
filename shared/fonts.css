@@ -1,0 +1,42 @@
+/* Official Huntress typefaces, self-hosted (no CDN dependency at talk time).
+ * Files vendored from npm @fontsource/{archivo,funnel-sans,ibm-plex-mono} (latin).
+ *   Archivo Black  — primary, large titles / primary messages (ALL CAPS)
+ *   Funnel Sans    — secondary, small headings / body / labels / eyebrows
+ *   IBM Plex Mono  — tertiary, microcopy / labels / some subheadings
+ */
+
+@font-face {
+  font-family: "Archivo";
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url("fonts/archivo-900.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Funnel Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/funnel-sans-400.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Funnel Sans";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("fonts/funnel-sans-700.woff2") format("woff2");
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/ibm-plex-mono-400.woff2") format("woff2");
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("fonts/ibm-plex-mono-600.woff2") format("woff2");
+}
