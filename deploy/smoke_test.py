@@ -110,12 +110,22 @@ def main():
     for p in ("/", "/your-bank.html", "/not-your-bank.html", "/poll", "/vote",
               "/assets/code-left.png", "/assets/code-right.png", "/healthz"):
         check(f"GET {p}", status_of("a", p), 200)
+    # Scanning a code casts a vote, then 302s to the matching reveal landing.
+    _, sa, _ = fetch(url("a", "/s/a"), follow=False)
+    check("GET /s/a (no-follow)", status_of("a", "/s/a", follow=False), 302)
+    check_true("scan A redirects to safe landing",
+               bool(sa and "your-bank" in sa), f"(Location={sa})")
+    _, sb, _ = fetch(url("a", "/s/b"), follow=False)
+    check_true("scan B redirects to malicious landing",
+               bool(sb and "not-your-bank" in sb), f"(Location={sb})")
 
     print("Demo B")
     for p in ("/", "/gotcha", "/assets/lookalike.png"):
         check(f"GET {p}", status_of("b", p), 200)
 
     print("Demo C")
+    check("GET / (stage slide)", status_of("c", "/"), 200)
+    check("GET /assets/redirector.png", status_of("c", "/assets/redirector.png"), 200)
     check("GET /go/demo1 (no-follow)", status_of("c", "/go/demo1", follow=False), 302)
     check("GET /admin (no token)", status_of("c", "/admin"), 403)
     check("GET /admin?token=", status_of("c", f"/admin?token={TOKEN}"), 200)

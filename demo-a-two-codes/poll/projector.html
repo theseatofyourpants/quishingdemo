@@ -48,6 +48,14 @@
     .join b { color:var(--cyan); }
     .total { margin-top:0.5rem; color:#4a525f; font-size:0.9rem; letter-spacing:0.16em;
       text-transform:uppercase; }
+    .pollctl { margin-top:1.6rem; display:flex; gap:0.8rem; justify-content:center; flex-wrap:wrap; }
+    .pollctl button { font-family:var(--sans); font-weight:700; text-transform:uppercase;
+      letter-spacing:0.06em; font-size:clamp(0.9rem,1.8vw,1.15rem); border-radius:2px;
+      padding:0.6em 1.4em; cursor:pointer; }
+    .pollctl .reveal { background:var(--cyan); color:#06070a; border:none; }
+    .pollctl .reset  { background:transparent; color:var(--cyan); border:2px solid var(--cyan); }
+    .pollctl button:active { transform:translateY(1px); }
+    .join b { color:var(--cyan); }
   </style>
 </head>
 <body>
@@ -67,7 +75,11 @@
   </div>
 
   <div class="total"><span id="total">0</span> votes</div>
-  <div class="join">Speaker keys: <b>R</b> reveal · <b>0</b> reset</div>
+  <div class="pollctl">
+    <button class="reveal" onclick="post('/api/reveal')">Reveal</button>
+    <button class="reset" onclick="if(confirm('Reset the poll to zero?'))post('/api/reset')">Reset poll</button>
+  </div>
+  <div class="join">Or use keys: <b>R</b> reveal · <b>0</b> reset</div>
 
   <script>
     document.getElementById('voteUrl').textContent = location.origin + '/vote';

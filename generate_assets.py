@@ -26,8 +26,10 @@ def gen_demo_a():
     a = config.DEMO_A
     # Two codes, different destinations, visually the same weight/size. That
     # indistinguishability IS the demo — do not style them differently.
-    make_qr(a["safe_url"], "demo-a-two-codes/assets/code-left.png")
-    make_qr(a["malicious_url"], "demo-a-two-codes/assets/code-right.png")
+    # Each encodes a scan-counting hop (/s/a, /s/b) so scanning either code
+    # casts a live-poll vote before landing on its reveal page.
+    make_qr(a["scan_safe_url"], "demo-a-two-codes/assets/code-left.png")
+    make_qr(a["scan_malicious_url"], "demo-a-two-codes/assets/code-right.png")
     print("  Demo A: code-left.png (safe), code-right.png (malicious)")
 
 

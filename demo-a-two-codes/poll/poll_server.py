@@ -4,11 +4,13 @@
 Serves everything Demo A needs on one port:
     /                stage slide (both codes, keyboard reveal)
     /stage           same
-    /your-bank.html      reveal landing for the "safe" code (QR target)
-    /not-your-bank.html  reveal landing for the "malicious" code (QR target)
+    /your-bank.html      reveal landing for the "safe" code
+    /not-your-bank.html  reveal landing for the "malicious" code
+    /s/a  /s/b       what the QR codes encode: count a vote, then 302 to the
+                     matching landing (scanning = voting)
     /assets/<f>      the QR images
     /poll            live-poll projector view (animated tally)
-    /vote            phone voting page
+    /vote            phone voting page (optional button fallback)
     /api/vote        POST {"choice":"a"|"b"}
     /api/reset       POST
     /api/reveal      POST
@@ -27,7 +29,8 @@ import os
 import queue
 import threading
 
-from flask import (Flask, Response, request, send_from_directory)
+from flask import (Flask, Response, abort, redirect, request,
+                   send_from_directory)
 
 HERE = os.path.dirname(os.path.abspath(__file__))          # .../poll
 DEMO_DIR = os.path.abspath(os.path.join(HERE, ".."))       # .../demo-a-two-codes
@@ -78,6 +81,25 @@ def create_app():
     @app.route("/assets/<path:f>")
     def assets(f):
         return send_from_directory(os.path.join(DEMO_DIR, "assets"), f)
+
+    # ---- scan-to-vote ----------------------------------------------------
+    # This is what the two QR codes encode. Scanning code A hits /s/a, code B
+    # hits /s/b: we count the vote, then 302 to the matching reveal landing.
+    # So the audience votes simply by scanning — no button tap required.
+    _SCAN_DEST = {"a": "/your-bank.html", "b": "/not-your-bank.html"}
+
+    @app.route("/s/<choice>")
+    def scan_vote(choice):
+        choice = (choice or "").lower()
+        if choice not in _SCAN_DEST:
+            abort(404)
+        with _lock:
+            _tally[choice] += 1
+        _broadcast()
+        # 302 + no-store so a re-scan always re-counts and nothing is cached.
+        resp = redirect(_SCAN_DEST[choice], code=302)
+        resp.headers["Cache-Control"] = "no-store, must-revalidate"
+        return resp
 
     @app.route("/shared/<path:f>")
     def shared(f):

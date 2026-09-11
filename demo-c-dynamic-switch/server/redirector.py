@@ -39,6 +39,8 @@ ADMIN_TOKEN = os.environ.get("ADMIN_TOKEN", "changeme")
 USE_LOCAL_LANDINGS = os.environ.get("USE_LOCAL_LANDINGS", "1") != "0"
 LANDINGS_DIR = os.path.abspath(os.path.join(HERE, "..", "assets"))
 ADMIN_DIR = os.path.abspath(os.path.join(HERE, "..", "admin"))
+DEMO_DIR = os.path.abspath(os.path.join(HERE, ".."))       # .../demo-c-dynamic-switch
+ASSETS_DIR = os.path.join(DEMO_DIR, "assets")
 
 SLUG = config.DEMO_C["slug"]
 TARGET_KEYS = list(config.DEMO_C["targets"].keys())  # e.g. ["benign", "swapped"]
@@ -135,12 +137,15 @@ def healthz():
 
 
 @app.route("/")
+@app.route("/stage")
 def index():
-    return Response(
-        "Demo C redirector is running.\n"
-        f"  audience/QR : /go/{SLUG}\n"
-        "  speaker     : /admin?token=***\n",
-        mimetype="text/plain")
+    # The projector slide the audience scans (shows the redirector QR).
+    return send_from_directory(DEMO_DIR, "stage.html")
+
+
+@app.route("/assets/<path:f>")
+def assets(f):
+    return send_from_directory(ASSETS_DIR, f)
 
 
 if __name__ == "__main__":

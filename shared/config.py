@@ -68,8 +68,14 @@ ADMIN_TOKEN = _env("ADMIN_TOKEN", "changeme")
 # YOU control (served on Demo A's own port). Nothing touches a real bank.
 # ---------------------------------------------------------------------------
 DEMO_A = {
+    # The landing pages (the "reveal" each code lands on).
     "safe_url": f"{_base('a')}/your-bank.html",
     "malicious_url": f"{_base('a')}/not-your-bank.html",
+    # What the QR codes actually encode: a scan-counting hop that records a
+    # vote and then 302-redirects to the landing above. So every scan of a
+    # code contributes to the live poll — no button tap needed.
+    "scan_safe_url": f"{_base('a')}/s/a",
+    "scan_malicious_url": f"{_base('a')}/s/b",
 }
 
 
