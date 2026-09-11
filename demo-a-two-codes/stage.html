@@ -7,12 +7,14 @@
   <link rel="stylesheet" href="../shared/landing.css">
   <style>
     body { justify-content: flex-start; padding-top: 4vh; }
+    /* Stage is a projector slide — give it room so the two codes sit side by side. */
+    .wrap { max-width: 1040px; }
     .codes {
       display: flex;
       gap: clamp(1.5rem, 6vw, 5rem);
       justify-content: center;
       align-items: flex-start;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;          /* keep A and B side by side on the projector */
       margin-top: 1.5rem;
     }
     .code {
@@ -20,12 +22,20 @@
       flex-direction: column;
       align-items: center;
       gap: 1rem;
+      min-width: 0;
     }
     .code .label {
+      font-family: var(--display);
       font-size: clamp(2rem, 6vw, 4rem);
-      font-weight: 800;
+      font-weight: 900;
+      line-height: 1;
     }
-    .code img { width: min(38vw, 340px); }
+    .code img { width: min(40vw, 380px); height: auto; }
+    /* Only stack if someone opens this on a genuinely narrow screen. */
+    @media (max-width: 620px) {
+      .codes { flex-wrap: wrap; }
+      .code img { width: min(70vw, 320px); }
+    }
     .verdict {
       font-size: clamp(1.1rem, 2.6vw, 1.6rem);
       font-weight: 800;
@@ -49,7 +59,7 @@
     <p class="eyebrow">QR security demo · Demo A</p>
     <h1>Which one is <span class="hl-t">safe</span>?</h1>
     <p class="lede">Two QR codes. One goes to your bank. One does not.
-      Vote with your hands.</p>
+      Scan the one you trust — every scan is a live vote.</p>
 
     <div class="codes">
       <div class="code">
