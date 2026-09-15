@@ -53,10 +53,10 @@ so Caddy can complete the Let's Encrypt challenge and serve certs directly.
 Wait for the records to resolve (`dig +short qr.yourdomain.com`) before step 6.
 
 ## 5. Get the code + configure
-Clone the repo (use a read-only **deploy key** or an HTTPS token — same as the
-NAS setup), then fill in the two config files:
+Clone the repo (it's public, so no auth is needed), then fill in the two config
+files:
 ```bash
-git clone git@github.com:theseatofyourpants/quishingdemo.git
+git clone https://github.com/theseatofyourpants/quishingdemo.git
 cd quishingdemo/deploy
 
 cp .env.example .env
