@@ -1,0 +1,53 @@
+# QR Quishing Demo Kit — public VPS deployment (e.g. a Hetzner Cloud server).
+#
+# Unlike deploy/docker-compose.yml (which publishes ports 10000-10005 for a
+# LAN/NAS behind a Cloudflare tunnel), this variant keeps the demos INTERNAL and
+# puts Caddy in front to terminate TLS on 80/443 with automatic Let's Encrypt
+# certificates. Nothing but 80/443 is exposed.
+#
+#   cd deploy
+#   cp .env.example .env             # set PUBLIC_* to your real hostnames + ADMIN_TOKEN
+#   cp Caddyfile.example Caddyfile   # set your six hostnames + ACME email
+#   docker compose -f docker-compose.cloud.yml up -d --build
+#
+# Point DNS A records (qr, qr-a … qr-e) at the server's public IP first, and
+# allow only 22/80/443 inbound in the Hetzner Cloud Firewall. See
+# docs/DEPLOY-CLOUD.md for the full walkthrough.
+
+services:
+  demos:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    image: qr-quishing-demos
+    container_name: qr-quishing-demos
+    restart: unless-stopped
+    # Internal only — reachable by Caddy over the compose network, never
+    # published to the host/public IP.
+    expose:
+      - "10000"   # hub
+      - "10001"   # Demo A
+      - "10002"   # Demo B
+      - "10003"   # Demo C
+      - "10004"   # Demo D
+      - "10005"   # Demo E
+    env_file:
+      - .env
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: qr-quishing-caddy
+    restart: unless-stopped
+    depends_on:
+      - demos
+    ports:
+      - "80:80"     # ACME HTTP-01 challenge + HTTP->HTTPS redirect
+      - "443:443"   # HTTPS
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data       # persists issued certificates across restarts
+      - caddy_config:/config
+
+volumes:
+  caddy_data:
+  caddy_config:
