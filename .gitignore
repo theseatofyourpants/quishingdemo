@@ -13,3 +13,9 @@ demo-c-dynamic-switch/server/state.json.tmp
 
 # Deployment secrets (copy from deploy/.env.example)
 deploy/.env
+
+# Filled-in Caddy config for the cloud/VPS deploy (copy from Caddyfile.example)
+deploy/Caddyfile
+
+# Synology metadata (created on the NAS deploy target)
+@eaDir/

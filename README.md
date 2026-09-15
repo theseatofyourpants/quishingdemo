@@ -32,6 +32,10 @@ exploitation.
 One container runs all five demos, each on its own port in the 10000 range, so
 you can front them with a Cloudflare tunnel — one hostname per demo.
 
+> Deploying to a **public cloud VPS** (e.g. Hetzner) instead? See
+> [`docs/DEPLOY-CLOUD.md`](docs/DEPLOY-CLOUD.md) — it fronts the demos with Caddy
+> for automatic HTTPS on 80/443, using `deploy/docker-compose.cloud.yml`.
+
 | Port | Demo | Public hostname (example) |
 |---|---|---|
 | 10000 | Hub index (links to all) | `qr.example.com` |

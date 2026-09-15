@@ -1,0 +1,31 @@
+# Caddy reverse proxy for the public VPS deployment.
+#   cp Caddyfile.example Caddyfile   # then edit the hostnames + email below
+#
+# Each site maps a public hostname to a demo port INSIDE the compose network
+# (service name "demos"). Caddy fetches + renews Let's Encrypt certs
+# automatically. The hostnames here MUST match the PUBLIC_* values in
+# deploy/.env — the QR codes encode those URLs.
+
+{
+	# ACME account email for certificate expiry notices. Use a real address.
+	email you@example.com
+}
+
+qr.example.com {
+	reverse_proxy demos:10000
+}
+qr-a.example.com {
+	reverse_proxy demos:10001
+}
+qr-b.example.com {
+	reverse_proxy demos:10002
+}
+qr-c.example.com {
+	reverse_proxy demos:10003
+}
+qr-d.example.com {
+	reverse_proxy demos:10004
+}
+qr-e.example.com {
+	reverse_proxy demos:10005
+}
